@@ -3,36 +3,26 @@
 // Calculate the payee (i.e. Tax), NHIF Deductions, NSSF Deductions, gross salary, and net salary. 
 
 //input basic pay and add the benifit to the total income 
-
-const basicSalary = parseFloat(prompt('Enter Basic Salary'))
-const benefits = parseFloat(prompt('Enter benefits:'))
-
-let grossSalary = basicSalary +benefits;
-
-function payeeCalculator(grossSalary){
-
-    if (grossSalary <24000){
-        return grossSalary*0.1;
+//function to calculate payeee
+// Function to calculate payee (Tax) deductions
+function payeeCalculator(grossSalary) {
+    if (grossSalary < 24000) {
+        return grossSalary * 0.1;
+    } else if (grossSalary > 24000 && grossSalary <= 32333) {
+        return grossSalary * 0.25;
+    } else if (grossSalary > 32333 && grossSalary <= 500000) {
+        return grossSalary * 0.3;
+    } else if (grossSalary > 500000 && grossSalary <= 800000) {
+        return grossSalary * 0.32;
+    } else if (grossSalary > 800000) {
+        return grossSalary * 0.35;
+    } else {
+        // You should specify a value for this case
+        return 0;
     }
-    else if (grossSalary>24000 && grossSalary <=32333){
-        return grossSalary*0.25; 
-    }
-    else if(grossSalary>32333 && grossSalary <=500000){
-        return grossSalary *0.3;
-    }else if(grossSalary>500000 && grossSalary <=800000){
-       return grossSalary *0.32;
-
-    }else if(grossSalary > 800000){
-
-        return grossSalary *0.35;
-    }
-    else{
-        return grossSalary *0.35
-    }
-
-
 }
 
+// Function to calculate NHIF deductions
 function nhifCalculator(grossSalary) {
     if (grossSalary < 6000) {
         return 150;
@@ -71,27 +61,51 @@ function nhifCalculator(grossSalary) {
     }
 }
 
-function nssfCalculator(grossSalary){
-
-return grossSalary *0.05;
+// Function to calculate NSSF deductions (6% of gross salary)
+function nssfCalculator(grossSalary) {
+    return grossSalary * 0.06;
 }
 
-//calculate deductions 
-let payeeDeductions = payeeCalculator(grossSalary);
-let nhifDeductions = nhifCalculator(grossSalary);
-let nssfDeductions = nssfCalculator(grossSalary);
 
 
-//calculate net salary 
-const netPay  = grossSalary -payeeDeductions-nhifDeductions-nssfDeductions
-
-
-//display the results
-console.log(`Gross Salary: $${grossSalary.toFixed(2)}`);
-console.log(`Payee (Tax) Deductions: $${payeeDeductions.toFixed(2)}`);
-console.log(`NHIF Deductions: $${nhifDeductions.toFixed(2)}`);
-console.log(`NSSF Deductions: $${nssfDeductions.toFixed(2)}`);
-console.log(`Net Salary: $${netSalary.toFixed(2)}`);
-
-// Close the readline interface
-rl.close();
+document.addEventListener("DOMContentLoaded", function () {
+    // Get references to HTML elements
+    const basicSalaryInput = document.getElementById("basicSalary");
+    const benefitsInput = document.getElementById("benefits");
+    const calculateButton = document.getElementById("calculateButton");
+    const resultsDiv = document.getElementById("results");
+    const grossSalaryResult = document.getElementById("grossSalaryResult");
+    const payeeDeductionsResult = document.getElementById("payeeDeductionsResult");
+    const nhifDeductionsResult = document.getElementById("nhifDeductionsResult");
+    const nssfDeductionsResult = document.getElementById("nssfDeductionsResult");
+    const netSalaryResult = document.getElementById("netSalaryResult");
+  
+    // Add click event listener to the Calculate button
+    calculateButton.addEventListener("click", function () {
+      // Parse input values
+      const basicSalary = parseFloat(basicSalaryInput.value);
+      const benefits = parseFloat(benefitsInput.value);
+  
+      // Calculate gross salary
+      const grossSalary = basicSalary + benefits;
+  
+      // Calculate deductions using our functions
+      const payeeDeductions = payeeCalculator(grossSalary);
+      const nhifDeductions = nhifCalculator(grossSalary);
+      const nssfDeductions = nssfCalculator(grossSalary);
+  
+      // Calculate net salary
+      const netSalary = grossSalary - payeeDeductions - nhifDeductions - nssfDeductions;
+  
+      // Display results
+      grossSalaryResult.textContent = `ksh${grossSalary.toFixed(2)}`;
+      payeeDeductionsResult.textContent = `ksh${payeeDeductions.toFixed(2)}`;
+      nhifDeductionsResult.textContent = `ksh${nhifDeductions.toFixed(2)}`;
+      nssfDeductionsResult.textContent = `ksh${nssfDeductions.toFixed(2)}`;
+      netSalaryResult.textContent = `ksh${netSalary.toFixed(2)}`;
+  
+      // Show the results div
+      resultsDiv.style.display = "block";
+    });
+  
+});
