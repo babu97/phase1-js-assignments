@@ -104,7 +104,6 @@ document.addEventListener("DOMContentLoaded", function () {
       nssfDeductionsResult.textContent = `ksh${nssfDeductions.toFixed(2)}`;
       netSalaryResult.textContent = `ksh${netSalary.toFixed(2)}`;
   
-      // Show the results div
       resultsDiv.style.display = "block";
     });
   
